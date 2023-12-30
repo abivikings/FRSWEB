@@ -85,19 +85,26 @@ const Sub = styled('sub')(({ theme }) => ({
   fontSize: theme.typography.body1.fontSize
 }))
 
-const UserViewLeft = () => {
+const DonarUserViewLeft = () => {
 
   const router = useRouter();
   const { id } = router.query;
   const [apiData, setApiData] = useState([]);
 
-  const CampaignList = ({ id }) => {
-
+  const DonarList = ({ id }) => {
+    const storedToken = window.localStorage.getItem(apiConfig.storageTokenKeyName)
 
     useEffect(() => {
       const fetchDataFromAPI = async () => {
         try {
-          const response = await axios.get(apiConfig.campaignDetails + `${id}`);
+          const response = await axios.get(apiConfig.addDonar + `${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${storedToken}`,
+              'Content-Type': 'application/json'
+            }
+        });
+          console.log(id)
           setApiData(response.data);
           console.log(response.data);
         } catch (error) {
@@ -112,7 +119,6 @@ const UserViewLeft = () => {
     //   // ... render your component based on apiData
     // );
   };
-
 
 
 
@@ -135,14 +141,14 @@ const UserViewLeft = () => {
     return (
       <Grid container spacing={6}>
         <Grid item xs={12}>
-        <CampaignList id={id} />
+        <DonarList id={id} />
           <Card>
             <CardContent sx={{ pt: 13.5, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
               {data.avatar ? (
                 <CustomAvatar
                   src={data.avatar}
                   variant='rounded'
-                  alt={data.fullName}
+                  alt={data.first_name}
                   sx={{ width: 100, height: 100, mb: 4 }}
                 />
               ) : (
@@ -156,7 +162,7 @@ const UserViewLeft = () => {
                 </CustomAvatar>
               )}
               <Typography variant='h4' sx={{ mb: 3 }}>
-              {apiData.title}
+              {apiData.first_name}
               {/* {data.fullName} */}
               </Typography>
 
@@ -384,4 +390,9 @@ const UserViewLeft = () => {
   }
 }
 
-export default UserViewLeft
+DonarUserViewLeft.acl = {
+  action: 'read',
+  subject: 'donardetails-page'
+}
+
+export default DonarUserViewLeft

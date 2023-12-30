@@ -53,21 +53,17 @@ const UserList = ({ apiData }) => {
   // Define columns for the MUI DataGrid
   const columns = [
     { field: 'id', headerName: 'ID', flex: 1 },
-    { field: 'title', headerName: 'Title', flex: 2 },
-    { field: 'user', headerName: 'User ID', flex: 1 },
-    { field: 'start_date', headerName: 'Start Date', flex: 1},
-    { field: 'end_date', headerName: 'End Date', flex: 1 },
-    { field: 'description', headerName: 'Description', flex: 1 },
-    { field: 'target_amount', headerName: 'Target Amount', flex: 1 },
-    { field: 'collected_amount', headerName: 'Collected Amount', flex: 1 },
-    { field: 'campaign.name', headerName: 'Campaign Name', flex: 2,
+    { field: 'first_name', headerName: 'First Name', flex: 2 },
+    { field: 'last_name', headerName: 'Last Name', flex: 1 },
+    { field: 'email', headerName: 'Email Address', flex: 1},
+    { field: 'campaign', headerName: 'Campaign', flex: 1 },
+    { field: 'added_by', headerName: 'Added By', flex: 1 },
+    { field: 'details', headerName: 'Details', flex: 2,
     renderCell: ({ row }) => (
-      <MuiLink href={`/campaigns/${row.id}`} passHref>
-        <a>{row.campaign.name}</a>
+      <MuiLink href={`/campadmin/donarlist/${row.id}`} passHref>
+        <a>Details</a>
       </MuiLink>
     ),},
-    { field: 'campaign.is_approved', headerName: 'Is Approved', flex: 1,renderCell: ({ row }) => (row.campaign.is_approved ? 'True' : 'False') },
-    { field: 'campaign.is_active', headerName: 'Is Active', flex: 1,renderCell: ({ row }) => (row.campaign.is_active ? 'True' : 'False') },
   ];
 
 
@@ -75,18 +71,19 @@ const UserList = ({ apiData }) => {
   const rows = apiData.map(item => ({
     key:item.id,
     id: item.id,
-    title: item.title,
-    user: item.user,
-    start_date: item.start_date,
-    end_date: item.end_date,
-    description: item.description,
-    target_amount: item.target_amount,
-    collected_amount: item.collected_amount,
-    campaign: {
-      name: item.campaign.name,
-      is_approved: item.campaign.is_approved,
-      is_active: item.campaign.is_active,
-    },
+    first_name: item.first_name,
+    last_name: item.last_name,
+    email: item.email,
+    campaign: item.campaign,
+    added_by: item.added_by,
+    id: item.id,
+    // target_amount: item.target_amount,
+    // collected_amount: item.collected_amount,
+    // campaign: {
+    //   name: item.campaign.name,
+    //   is_approved: item.campaign.is_approved,
+    //   is_active: item.campaign.is_active,
+    // },
   }));
 
   return (
@@ -110,15 +107,16 @@ const UserList = ({ apiData }) => {
 };
 
 // This is where you fetch data from the API and pass it to the UserList component
-const CampaignList = () => {
+const AllDonarList = () => {
   const [apiData, setApiData] = useState([]);
 
   // Fetch data from the API when the component mounts
   useEffect(() => {
     const fetchDataFromAPI = async () => {
       try {
-        const response = await axios.get(apiConfig.campaignDetails);
+        const response = await axios.get(apiConfig.addDonar);
         setApiData(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error('Error:', error);
       }
@@ -130,5 +128,10 @@ const CampaignList = () => {
   return <UserList apiData={apiData} />;
 };
 
-export default CampaignList;
+AllDonarList.acl = {
+  action: 'read',
+  subject: 'alldonarlist-page'
+}
+
+export default AllDonarList;
 

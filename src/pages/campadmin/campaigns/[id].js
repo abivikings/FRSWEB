@@ -99,6 +99,7 @@ const UserViewLeft = () => {
         try {
           const response = await axios.get(apiConfig.campaignDetails + `${id}`);
           setApiData(response.data);
+          console.log(id);
           console.log(response.data);
         } catch (error) {
           console.error('Error:', error);
@@ -382,6 +383,11 @@ const UserViewLeft = () => {
   } else {
     return null
   }
+}
+
+UserViewLeft.acl = {
+  action: 'read',
+  subject: 'userviewleft-page'
 }
 
 export default UserViewLeft

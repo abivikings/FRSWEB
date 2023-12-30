@@ -8,12 +8,15 @@ export const AppAbility = Ability
  * admin can manage everything and client can just visit ACL page
  */
 const defineRulesFor = (role, subject) => {
-  const { can, rules } = new AbilityBuilder(AppAbility)
+  const { can,cannot, rules } = new AbilityBuilder(AppAbility)
   if (role === 'super_admin') {
     can('manage', 'all')
+    cannot(['read', 'create', 'update', 'delete'], ['campadmin-page','camplist-page','userviewleft-page','adddonar-page','home-page','alldonarlist-page','donardetails-page','donardashboard-page','addpayment-page'])
   } else if (role === 'camp_admin') {
-    can(['read'], 'acl-page')
-  } else {
+    can(['read', 'create', 'update', 'delete'], ['campadmin-page','camplist-page','userviewleft-page','adddonar-page','home-page','alldonarlist-page','donardetails-page'])
+  }else if (role === 'donar') {
+    can(['read', 'create', 'update', 'delete'], ['donardashboard-page','addpayment-page'])
+  }else {
     can(['read', 'create', 'update', 'delete'], subject)
   }
 
