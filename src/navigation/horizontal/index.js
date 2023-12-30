@@ -22,6 +22,22 @@ const navigation = () => {
       ]
     },
     {
+      title: 'Donar Dashboard',
+      icon: 'tabler:smart-home',
+      badgeColor: 'error',
+      path: '/donar/dashboard',
+      action: 'read',
+      subject: 'donardashboard-page'
+    },
+    {
+      title: 'Add Payment',
+      icon: 'tabler:smart-home',
+      badgeColor: 'error',
+      path: '/donar/payment',
+      action: 'read',
+      subject: 'addpayment-page'
+    },
+    {
       icon: 'tabler:layout-grid-add',
       title: 'Apps',
       children: [

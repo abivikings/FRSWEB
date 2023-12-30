@@ -98,6 +98,7 @@ const UserViewLeft = () => {
       const fetchDataFromAPI = async () => {
         try {
           const response = await axios.get(apiConfig.campaignDetails + `${id}`);
+          console.log(id)
           setApiData(response.data);
           console.log(response.data);
         } catch (error) {

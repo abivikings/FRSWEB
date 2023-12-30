@@ -62,7 +62,7 @@ const UserList = ({ apiData }) => {
     { field: 'collected_amount', headerName: 'Collected Amount', flex: 1 },
     { field: 'campaign.name', headerName: 'Campaign Name', flex: 2,
     renderCell: ({ row }) => (
-      <MuiLink href={`/campaigns/${row.id}`} passHref>
+      <MuiLink href={`/admin/campaigns/${row.id}`} passHref>
         <a>{row.campaign.name}</a>
       </MuiLink>
     ),},
@@ -119,6 +119,7 @@ const CampaignList = () => {
       try {
         const response = await axios.get(apiConfig.campaignDetails);
         setApiData(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error('Error:', error);
       }

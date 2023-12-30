@@ -62,7 +62,7 @@ const UserList = ({ apiData }) => {
     { field: 'collected_amount', headerName: 'Collected Amount', flex: 1 },
     { field: 'campaign.name', headerName: 'Campaign Name', flex: 2,
     renderCell: ({ row }) => (
-      <MuiLink href={`/campaigns/${row.id}`} passHref>
+      <MuiLink href={`/campadmin/campaigns/${row.id}`} passHref>
         <a>{row.campaign.name}</a>
       </MuiLink>
     ),},
@@ -107,6 +107,7 @@ const UserList = ({ apiData }) => {
       </Grid>
     </Grid>
   );
+
 };
 
 // This is where you fetch data from the API and pass it to the UserList component
@@ -129,6 +130,11 @@ const CampaignList = () => {
 
   return <UserList apiData={apiData} />;
 };
+
+CampaignList.acl = {
+  action: 'read',
+  subject: 'camplist-page'
+}
 
 export default CampaignList;
 

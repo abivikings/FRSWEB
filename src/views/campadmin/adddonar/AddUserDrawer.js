@@ -117,8 +117,6 @@ const SidebarAddUser = props => {
         ) // Replace '/api/your-endpoint' with your API endpoint
       // Handle successful response
       console.log('Response:', response.data)
-      // Show success message (you can replace this with your own notification logic)
-      alert('Camp Admin User added successfully');
     } catch (error) {
       // Handle error
       console.error('Error:', error)
@@ -165,7 +163,7 @@ const SidebarAddUser = props => {
       sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
     >
       <Header>
-        <Typography variant='h5'>Add New Campaign</Typography>
+        <Typography variant='h5'>Add Campaign</Typography>
         <IconButton
           size='small'
           onClick={handleClose}
