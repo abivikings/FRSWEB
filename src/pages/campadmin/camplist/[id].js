@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState,useEffect } from 'react'
+import { useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -21,7 +21,6 @@ import InputAdornment from '@mui/material/InputAdornment'
 import LinearProgress from '@mui/material/LinearProgress'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import DialogContentText from '@mui/material/DialogContentText'
-import { useRouter } from 'next/router';
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -35,10 +34,6 @@ import UserSubscriptionDialog from 'src/views/apps/user/view/UserSubscriptionDia
 
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
-
-// ** Third Party Components
-import axios from 'axios'
-import apiConfig from 'src/configs/auth'
 
 const data = {
   id: 1,
@@ -86,36 +81,6 @@ const Sub = styled('sub')(({ theme }) => ({
 }))
 
 const UserViewLeft = () => {
-
-  const router = useRouter();
-  const { id } = router.query;
-  const [apiData, setApiData] = useState([]);
-
-  const CampaignList = ({ id }) => {
-
-
-    useEffect(() => {
-      const fetchDataFromAPI = async () => {
-        try {
-          const response = await axios.get(apiConfig.campaignDetails + `${id}`);
-          setApiData(response.data);
-          console.log(response.data);
-        } catch (error) {
-          console.error('Error:', error);
-        }
-      };
-
-      fetchDataFromAPI();
-    }, [id]);
-
-    // return (
-    //   // ... render your component based on apiData
-    // );
-  };
-
-
-
-
   // ** States
   const [openEdit, setOpenEdit] = useState(false)
   const [openPlans, setOpenPlans] = useState(false)
@@ -129,13 +94,10 @@ const UserViewLeft = () => {
   // Handle Upgrade Plan dialog
   const handlePlansClickOpen = () => setOpenPlans(true)
   const handlePlansClose = () => setOpenPlans(false)
-
   if (data) {
-
     return (
       <Grid container spacing={6}>
         <Grid item xs={12}>
-        <CampaignList id={id} />
           <Card>
             <CardContent sx={{ pt: 13.5, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
               {data.avatar ? (
@@ -156,10 +118,8 @@ const UserViewLeft = () => {
                 </CustomAvatar>
               )}
               <Typography variant='h4' sx={{ mb: 3 }}>
-              {apiData.title}
-              {/* {data.fullName} */}
+                {data.fullName}
               </Typography>
-
               <CustomChip
                 rounded
                 skin='light'
@@ -287,7 +247,7 @@ const UserViewLeft = () => {
                         fullWidth
                         label='Full Name'
                         placeholder='John Doe'
-                        defaultValue={apiData.title}
+                        defaultValue={data.fullName}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -376,9 +336,140 @@ const UserViewLeft = () => {
             <UserSubscriptionDialog open={subscriptionDialogOpen} setOpen={setSubscriptionDialogOpen} />
           </Card>
         </Grid>
+
+        <Grid item xs={12}>
+          <Card>
+            <CardContent sx={{ pb: 1, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+              <CustomChip rounded skin='light' size='small' color='primary' label='Popular' />
+              <Box sx={{ display: 'flex', position: 'relative' }}>
+                <Sup>$</Sup>
+                <Typography
+                  variant='h4'
+                  sx={{ mt: -1, mb: -1.2, color: 'primary.main', fontSize: '2.375rem !important' }}
+                >
+                  99
+                </Typography>
+                <Sub>/ month</Sub>
+              </Box>
+            </CardContent>
+
+            <CardContent>
+              <Box sx={{ mt: 2.5, mb: 4 }}>
+                <Box sx={{ display: 'flex', mb: 2, alignItems: 'center', '& svg': { mr: 2, color: 'text.secondary' } }}>
+                  <Icon icon='tabler:point' fontSize='1.125rem' />
+                  <Typography sx={{ color: 'text.secondary' }}>10 Users</Typography>
+                </Box>
+                <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', '& svg': { mr: 2, color: 'text.secondary' } }}>
+                  <Icon icon='tabler:point' fontSize='1.125rem' />
+                  <Typography sx={{ color: 'text.secondary' }}>Up to 10GB storage</Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 2, color: 'text.secondary' } }}>
+                  <Icon icon='tabler:point' fontSize='1.125rem' />
+                  <Typography sx={{ color: 'text.secondary' }}>Basic Support</Typography>
+                </Box>
+              </Box>
+              <Box sx={{ display: 'flex', mb: 1.5, justifyContent: 'space-between' }}>
+                <Typography sx={{ fontWeight: 500 }}>Days</Typography>
+                <Typography sx={{ fontWeight: 500 }}>75% Completed</Typography>
+              </Box>
+              <LinearProgress value={75} variant='determinate' sx={{ height: 10 }} />
+              <Typography sx={{ mt: 1.5, mb: 6, color: 'text.secondary' }}>4 days remaining</Typography>
+              <Button fullWidth variant='contained' onClick={handlePlansClickOpen}>
+                Upgrade Plan
+              </Button>
+            </CardContent>
+
+            <Dialog
+              open={openPlans}
+              onClose={handlePlansClose}
+              aria-labelledby='user-view-plans'
+              aria-describedby='user-view-plans-description'
+              sx={{ '& .MuiPaper-root': { width: '100%', maxWidth: 650 } }}
+            >
+              <DialogTitle
+                id='user-view-plans'
+                sx={{
+                  textAlign: 'center',
+                  fontSize: '1.625rem !important',
+                  px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
+                  pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
+                }}
+              >
+                Upgrade Plan
+              </DialogTitle>
+
+              <DialogContent
+                sx={{ px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`] }}
+              >
+                <DialogContentText sx={{ textAlign: 'center' }} id='user-view-plans-description'>
+                  Choose the best plan for the user.
+                </DialogContentText>
+              </DialogContent>
+
+              <DialogContent
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexWrap: ['wrap', 'nowrap'],
+                  pt: theme => `${theme.spacing(2)} !important`,
+                  pb: theme => `${theme.spacing(8)} !important`,
+                  px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`]
+                }}
+              >
+                <CustomTextField
+                  select
+                  fullWidth
+                  label='Choose Plan'
+                  defaultValue='Standard'
+                  sx={{ mr: [0, 3], mb: [3, 0] }}
+                >
+                  <MenuItem value='Basic'>Basic - $0/month</MenuItem>
+                  <MenuItem value='Standard'>Standard - $99/month</MenuItem>
+                  <MenuItem value='Enterprise'>Enterprise - $499/month</MenuItem>
+                  <MenuItem value='Company'>Company - $999/month</MenuItem>
+                </CustomTextField>
+                <Button variant='contained' sx={{ minWidth: ['100%', 0], mt: 4 }}>
+                  Upgrade
+                </Button>
+              </DialogContent>
+
+              <Divider sx={{ m: '0 !important' }} />
+
+              <DialogContent
+                sx={{
+                  pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(8)} !important`],
+                  px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
+                  pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
+                }}
+              >
+                <Typography variant='h6' sx={{ mb: 2, color: theme => theme.palette.text.secondary }}>
+                  User current plan is standard plan
+                </Typography>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexWrap: ['wrap', 'nowrap'],
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <Box sx={{ mr: 3, display: 'flex', ml: 2.4, position: 'relative' }}>
+                    <Sup>$</Sup>
+                    <Typography variant='h1' sx={{ mb: -1.2, color: 'primary.main', fontSize: '3rem !important' }}>
+                      99
+                    </Typography>
+                    <Sub>/ month</Sub>
+                  </Box>
+                  <Button color='error' variant='tonal' sx={{ mt: 2 }} onClick={() => setSubscriptionDialogOpen(true)}>
+                    Cancel Subscription
+                  </Button>
+                </Box>
+              </DialogContent>
+            </Dialog>
+          </Card>
+        </Grid>
       </Grid>
     )
-
   } else {
     return null
   }

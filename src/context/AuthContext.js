@@ -34,7 +34,8 @@ const AuthProvider = ({ children }) => {
       if (storedToken) {
         setLoading(true)
         await axios
-          .get(authConfig.meEndpoint, {
+          .get(authConfig.meEndpoint, 
+            {
             headers: {
               Authorization: `Bearer ${storedToken}`,
               'Content-Type': 'application/json'

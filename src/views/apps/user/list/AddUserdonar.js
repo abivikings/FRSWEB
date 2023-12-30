@@ -102,32 +102,64 @@ const SidebarAddUser = props => {
     resolver: yupResolver(schema)
   })
 
-  const handleSubmitCampReg = async e => {
-    e.preventDefault()
-    const formData = new FormData(e.target)
+  const handleSubmitCampReg = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
     const storedToken = window.localStorage.getItem('accessToken');
     try {
-      const response = await axios.post(apiConfig.createCampaign,
-        formData, {
+      const response = await axios.post(
+        apiConfig.addDonar,
+        formData,
+        {
           headers: {
             Authorization: `Bearer ${storedToken}`,
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         }
-        ) // Replace '/api/your-endpoint' with your API endpoint
+      );
+
       // Handle successful response
-      console.log('Response:', response.data)
+      console.log('Response:', response.data);
+
       // Show success message (you can replace this with your own notification logic)
-      alert('Camp Admin User added successfully');
+      alert('Donar User added successfully');
+
+      // Clear form fields
+      reset();
+
+      // Close the sidebar
+      handleClose();
     } catch (error) {
       // Handle error
-      console.error('Error:', error)
+      console.error('Error:', error);
+      // You might want to show an error message here
     }
-  }
+  };
+  
+  // const handleSubmitCampReg = async e => {
+  //   e.preventDefault()
+  //   const formData = new FormData(e.target)
+  //   const storedToken = window.localStorage.getItem('accessToken');
+  //   try {
+  //     const response = await axios.post(apiConfig.addDonar,
+  //       formData, {
+  //         headers: {
+  //           Authorization: `Bearer ${storedToken}`,
+  //           'Content-Type': 'application/json'
+  //         }
+  //       }
+  //       ) // Replace '/api/your-endpoint' with your API endpoint
+  //     // Handle successful response
+  //     console.log('Response:', response.data)
+  //   } catch (error) {
+  //     // Handle error
+  //     console.error('Error:', error)
+  //   }
+  // }
 
 
   const onSubmit = data => {
-    if (store.allData.some(u => u.email === data.email || u.username === data.username)) {
+    if (store.allData.some(u => u.first_name === data.first_name || u.username === data.username)) {
       store.allData.forEach(u => {
         if (u.email === data.email) {
           setError('email', {
@@ -165,7 +197,7 @@ const SidebarAddUser = props => {
       sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
     >
       <Header>
-        <Typography variant='h5'>Add New Campaign</Typography>
+        <Typography variant='h5'>Add New Donar</Typography>
         <IconButton
           size='small'
           onClick={handleClose}
@@ -185,71 +217,103 @@ const SidebarAddUser = props => {
       <Box sx={{ p: theme => theme.spacing(0, 6, 6) }}>
         <form onSubmit={handleSubmitCampReg}>
           <Controller
-            name='name'
+            name='first_name'
             control={control}
             rules={{ required: true }}
             render={({ field: { value, onChange } }) => (
               <CustomTextField
-            name='name'
-
+                name='first_name'
                 fullWidth
                 value={value}
                 sx={{ mb: 4 }}
-                label='Camp Name'
+                label='First Name'
                 onChange={onChange}
-                placeholder='Rais Fund for Go Home'
-                error={Boolean(errors.name)}
-                {...(errors.name && { helperText: errors.name.message })}
+                placeholder='Raymond'
+                error={Boolean(errors.first_name)}
+                {...(errors.first_name && { helperText: errors.first_name.message })}
               />
             )}
           />
           <Controller
-            name='camp_admin_name'
+            name='last_name'
             control={control}
             rules={{ required: true }}
             render={({ field: { value, onChange } }) => (
               <CustomTextField
-            name='camp_admin_name'
-
+                name='last_name'
                 fullWidth
                 value={value}
                 sx={{ mb: 4 }}
-                label='Camp Admin Name'
+                label='Last Name'
                 onChange={onChange}
-                placeholder='Chaim Levilev'
-                error={Boolean(errors.camp_admin_name)}
-                {...(errors.camp_admin_name && { helperText: errors.camp_admin_name.message })}
+                placeholder='Redemption'
+                error={Boolean(errors.last_name)}
+                {...(errors.last_name && { helperText: errors.last_name.message })}
               />
             )}
           />
           <Controller
-            name='camp_admin_email'
+            name='added_by'
             control={control}
             rules={{ required: true }}
             render={({ field: { value, onChange } }) => (
               <CustomTextField
-            name='camp_admin_email'
-
+                name='added_by'
+                fullWidth
+                value={value}
+                sx={{ mb: 4 }}
+                label='Added By'
+                onChange={onChange}
+                placeholder='Added by Chaim levilev'
+                error={Boolean(errors.added_by)}
+                {...(errors.added_by && { helperText: errors.added_by.message })}
+              />
+            )}
+          />
+           <Controller
+            name='campaign'
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { value, onChange } }) => (
+              <CustomTextField
+                name='campaign'
+                fullWidth
+                value={value}
+                sx={{ mb: 4 }}
+                label='Campaign'
+                onChange={onChange}
+                placeholder='Go Home'
+                error={Boolean(errors.campaign)}
+                {...(errors.campaign && { helperText: errors.campaign.message })}
+              />
+            )}
+          />
+          <Controller
+            name='email'
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { value, onChange } }) => (
+              <CustomTextField
+                name='email'
                 fullWidth
                 type='email'
-                label='CAmp Admin Email'
+                label='Email Address'
                 value={value}
                 sx={{ mb: 4 }}
                 onChange={onChange}
-                error={Boolean(errors.camp_admin_email)}
-                placeholder='johndoe@email.com'
-                {...(errors.camp_admin_email && { helperText: errors.camp_admin_email.message })}
+                error={Boolean(errors.emailaddress)}
+                placeholder='redray@gmail.com'
+                {...(errors.emailaddress && { helperText: errors.emailaddress.message })}
               />
             )}
           />
-          <Controller
+          {/* <Controller
             name='password'
             control={control}
             rules={{ required: true }}
             render={({ field: { value, onChange } }) => (
               <CustomTextField
-            name='password'
-
+                name='password'
                 fullWidth
                 type='Password'
                 value={value}
@@ -260,7 +324,7 @@ const SidebarAddUser = props => {
                 {...(errors.password && { helperText: errors.password.message })}
               />
             )}
-          />
+          /> */}
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Button type='submit' variant='contained' sx={{ mr: 3 }}>

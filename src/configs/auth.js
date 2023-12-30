@@ -5,5 +5,6 @@ export default {
   storageTokenKeyName: 'accessToken',
   onTokenExpiration: 'refreshToken', // logout | refreshToken
   createCampaign: process.env.NEXT_PUBLIC_BASE_URL +  '/api/campaigns/',
-  campaignDetails: process.env.NEXT_PUBLIC_BASE_URL +  '/api/campaign-details/'
+  campaignDetails: process.env.NEXT_PUBLIC_BASE_URL +  '/api/campaign-details/',
+  addDonar: process.env.NEXT_PUBLIC_BASE_URL +  '/api/donor/'
 }
