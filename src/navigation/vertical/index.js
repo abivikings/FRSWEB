@@ -4,7 +4,7 @@ const navigation = () => {
       title: 'Dashboards',
       icon: 'tabler:smart-home',
       badgeColor: 'error',
-      path: '/dashboards/analytics'
+      path: '/admin/dashboards'
     },
     {
       title: 'User',
