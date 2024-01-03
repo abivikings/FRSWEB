@@ -14,7 +14,7 @@ const defineRulesFor = (role, subject) => {
     cannot(['read', 'create', 'update', 'delete'], ['campadmin-page','camplist-page','userviewleft-page','adddonar-page','home-page','alldonarlist-page','donardetails-page','donardashboard-page','addpayment-page'])
   } else if (role === 'camp_admin') {
     can(['read', 'create', 'update', 'delete'], ['campadmin-page','camplist-page','userviewleft-page','adddonar-page','home-page','alldonarlist-page','donardetails-page'])
-  }else if (role === 'donar') {
+  }else if (role === 'donor') {
     can(['read', 'create', 'update', 'delete'], ['donardashboard-page','addpayment-page'])
   }else {
     can(['read', 'create', 'update', 'delete'], subject)
