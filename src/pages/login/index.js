@@ -200,7 +200,7 @@ const LoginPage = () => {
                 Camp Admin: <strong>testcamp@gmail.com</strong> / Pass: <strong>12345</strong>
               </Typography>
               <Typography variant='body2' sx={{ color: 'primary.main' }}>
-                Donar: <strong>donar@gmail.com</strong> / Pass: <strong>12345</strong>
+                Donar: <strong>donor@gmail.com</strong> / Pass: <strong>12345</strong>
               </Typography>
             </Alert>
             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
