@@ -90,7 +90,7 @@ const ChartjsPolarAreaChart = props => {
   return (
     <Card>
       <CardHeader
-        title='Average Skills'
+        title='All Users '
         action={
           <OptionsMenu
             iconProps={{ fontSize: 20 }}
