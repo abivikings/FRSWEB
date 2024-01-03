@@ -6,5 +6,6 @@ export default {
   onTokenExpiration: 'refreshToken', // logout | refreshToken
   createCampaign: process.env.NEXT_PUBLIC_BASE_URL +  '/api/campaigns/',
   campaignDetails: process.env.NEXT_PUBLIC_BASE_URL +  '/api/campaign-details/',
-  addDonar: process.env.NEXT_PUBLIC_BASE_URL +  '/api/donor/'
+  addDonar: process.env.NEXT_PUBLIC_BASE_URL +  '/api/donor/',
+  superAdminDashboard: process.env.NEXT_PUBLIC_BASE_URL +  '/api/super_admin_dashboard/'
 }

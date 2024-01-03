@@ -44,7 +44,7 @@ const AnalyticsDashboard = () => {
           <Grid item xs={12} md={6}>
             <AnalyticsSupportTracker />
           </Grid>
-          <Grid item xs={12} md={6} lg={4}>
+          {/* <Grid item xs={12} md={6} lg={4}>
             <AnalyticsSalesByCountries />
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
@@ -58,7 +58,7 @@ const AnalyticsDashboard = () => {
           </Grid>
           <Grid item xs={12} lg={8}>
             <AnalyticsProject />
-          </Grid>
+          </Grid> */}
         </Grid>
       </KeenSliderWrapper>
     </ApexChartWrapper>
