@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
@@ -47,6 +47,15 @@ import * as source from 'src/views/forms/form-elements/checkbox/CheckboxesSource
 // ** Demo Components Imports
 import CheckboxesBasic from 'src/views/donor/addpayment/CheckboxesBasic'
 
+// ** MUI Imports
+import Checkbox from '@mui/material/Checkbox'
+import FormGroup from '@mui/material/FormGroup'
+
+
+// ** Third Party Components
+import axios from 'axios'
+import apiConfig from 'src/configs/auth'
+
 
 // Styled component for the Box wrappers in Delivery Options' accordion
 const BoxWrapper = styled(Box)(({ theme }) => ({
@@ -70,6 +79,7 @@ const DonarAddPaymentPage = () => {
   // ** States
   const [cvc, setCvc] = useState('')
   const [name, setName] = useState('')
+  const [amount, setAmount] = useState('')
   const [focus, setFocus] = useState('')
   const [expiry, setExpiry] = useState('')
   const [cardNumber, setCardNumber] = useState('')
@@ -94,6 +104,21 @@ const DonarAddPaymentPage = () => {
       setCvc(target.value)
     }
   }
+  const [apiData, setApiData] = useState([]);
+
+  // Fetch data from the API when the component mounts
+  useEffect(() => {
+    const fetchDataFromAPI = async () => {
+      try {
+        const response = await axios.get(apiConfig.donate);
+        setApiData(response.data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchDataFromAPI();
+  }, []);
 
   return (
     <form onSubmit={e => e.preventDefault()}>
@@ -109,20 +134,17 @@ const DonarAddPaymentPage = () => {
         </AccordionSummary>
         <Divider sx={{ m: '0 !important' }} />
         <AccordionDetails>
+        <Grid item xs={12}>
+          <FormGroup row>
+              <FormControlLabel label='Do you want to save donor information? Select the checkbox if yes. Otherwise, leave empty' control={<Checkbox name='basic-checked' />} />
+            </FormGroup>
+        </Grid>
+        </AccordionDetails>
+        <Divider sx={{ m: '0 !important' }} />
+        <AccordionDetails>
           <Grid container spacing={5}>
             <Grid item xs={12}>
               <Grid container spacing={6}>
-              <Grid item xs={12}>
-                  <CardSnippet
-                    title='Would you like to store your details for your upcoming donation transaction?'
-                    code={{
-                      tsx: null,
-                      jsx: source.checkboxesbasicjsxcode
-                    }}
-                  >
-                    <CheckboxesBasic />
-                  </CardSnippet>
-                </Grid>
                 <Grid item xs={12}>
                   <RadioGroup
                     row
@@ -171,7 +193,7 @@ const DonarAddPaymentPage = () => {
                               onChange={e => setName(e.target.value)}
                             />
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <CustomTextField
                               fullWidth
                               name='expiry'
@@ -185,7 +207,7 @@ const DonarAddPaymentPage = () => {
                               onFocus={e => setFocus(e.target.name)}
                             />
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <CustomTextField
                               fullWidth
                               name='cvc'
@@ -196,6 +218,19 @@ const DonarAddPaymentPage = () => {
                               onChange={handleInputChange}
                               onFocus={e => setFocus(e.target.name)}
                               placeholder={Payment.fns.cardType(cardNumber) === 'amex' ? '1234' : '123'}
+                            />
+                          </Grid>
+                          <Grid item xs={4}>
+                            <CustomTextField
+                              fullWidth
+                              name='amount'
+                              value={amount}
+                              label='Amount'
+                              autoComplete='off'
+                              onBlur={handleBlur}
+                              placeholder='$1000'
+                              onFocus={e => setFocus(e.target.amount)}
+                              onChange={e => setAmount(e.target.value)}
                             />
                           </Grid>
                         </Grid>
