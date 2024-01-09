@@ -80,12 +80,14 @@ const DonarAddPaymentPage = () => {
   const [cvc, setCvc] = useState('')
   const [name, setName] = useState('')
   const [amount, setAmount] = useState('')
+  const [campaign_id, setCampId] = useState('')
   const [focus, setFocus] = useState('')
   const [expiry, setExpiry] = useState('')
-  const [cardNumber, setCardNumber] = useState('')
+  const [card_number, setCardNumber] = useState('')
   const [option, setOption] = useState('standard')
   const [paymentMethod, setPaymentMethod] = useState('card')
   const [expanded, setExpanded] = useState('panel3')
+  const [expDate, setExpDate] = useState('');
 
   const handleChange = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false)
@@ -93,35 +95,75 @@ const DonarAddPaymentPage = () => {
   const handleBlur = () => setFocus('')
 
   const handleInputChange = ({ target }) => {
-    if (target.name === 'number') {
+    if (target.name === 'card_number') {
       target.value = formatCreditCardNumber(target.value, Payment)
       setCardNumber(target.value)
     } else if (target.name === 'expiry') {
       target.value = formatExpirationDate(target.value)
       setExpiry(target.value)
     } else if (target.name === 'cvc') {
-      target.value = formatCVC(target.value, cardNumber, Payment)
+      target.value = formatCVC(target.value, card_number, Payment)
       setCvc(target.value)
     }
   }
-  const [apiData, setApiData] = useState([]);
+  
+  const handleClose = () => {
+    // Implement your logic to close the sidebar or modal here
+    // For example, you might have another state variable like isOpen, and set it to false
+    // setIsOpen(false);
+  };
 
-  // Fetch data from the API when the component mounts
-  useEffect(() => {
-    const fetchDataFromAPI = async () => {
-      try {
-        const response = await axios.get(apiConfig.donate);
-        setApiData(response.data);
-      } catch (error) {
-        console.error('Error:', error);
-      }
+  const handleSubmitDonorPayment = async (e) => {
+    e.preventDefault();
+    const storedToken = window.localStorage.getItem('accessToken');
+    
+    const [expMonth, expYear] = expiry.split('/');
+    const newExpDate = `20${expYear}-${expMonth}`;
+    const cardNum=card_number.replace(/\s/g, '');
+
+    const formData = {
+      campaign_id:campaign_id,
+      card_number: cardNum,
+      exp_date: newExpDate,
+      amount: parseFloat(amount) || 0
     };
-
-    fetchDataFromAPI();
-  }, []);
+    console.log(formData);
+  
+    try {
+      const response = await axios.post(
+        apiConfig.donate,
+        formData,
+        
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${storedToken}`,
+        //     'Content-Type': 'application/json',
+        //   },
+        //}
+      );
+  
+      // Handle successful response
+      console.log('Response:', response.data);
+  
+      // Show success message (you can replace this with your own notification logic)
+      alert('Donate By User Successfully');
+  
+      // Clear form fields
+      e.target.reset();
+  
+      // Close the sidebar
+      handleClose();
+    } catch (error) {
+      // Handle error
+      console.error('Error:', error);
+      // You might want to show an error message here
+    }
+  };
+  
 
   return (
-    <form onSubmit={e => e.preventDefault()}>
+    <form onSubmit={handleSubmitDonorPayment}>
+    {/* <form onSubmit={e => e.preventDefault()}> */}
       <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
         <AccordionSummary
           expandIcon={<Icon icon='tabler:chevron-down' />}
@@ -162,36 +204,49 @@ const DonarAddPaymentPage = () => {
                     <Grid container spacing={6}>
                       <Grid item xs={12}>
                         <CardWrapper>
-                          <Cards cvc={cvc} focused={focus} expiry={expiry} name={name} number={cardNumber} />
+                          <Cards cvc={cvc} focused={focus} expiry={expiry} name={name} number={card_number} />
                         </CardWrapper>
                       </Grid>
                       <Grid item xs={12} md={8} xl={6} sx={{ mt: 2 }}>
                         <Grid container spacing={6}>
                           <Grid item xs={12}>
-                            <CustomTextField
-                              fullWidth
-                              name='number'
-                              value={cardNumber}
-                              autoComplete='off'
-                              label='Card Number'
-                              onBlur={handleBlur}
-                              onChange={handleInputChange}
-                              placeholder='0000 0000 0000 0000'
-                              onFocus={e => setFocus(e.target.name)}
-                            />
+                          <CustomTextField
+                            fullWidth
+                            name='card_number'
+                            value={card_number}
+                            autoComplete='off'
+                            label='Card Number'
+                            onBlur={handleBlur}
+                            onChange={handleInputChange}
+                            placeholder='0000 0000 0000 0000'
+                            onFocus={e => setFocus(e.target.name)}  // Updated this line
+                          />
                           </Grid>
-                          <Grid item xs={12}>
-                            <CustomTextField
-                              fullWidth
-                              name='name'
-                              value={name}
-                              label='Name'
-                              autoComplete='off'
-                              onBlur={handleBlur}
-                              placeholder='John Doe'
-                              onFocus={e => setFocus(e.target.name)}
-                              onChange={e => setName(e.target.value)}
-                            />
+                          <Grid item xs={8}>
+                          <CustomTextField
+                            fullWidth
+                            name='name'
+                            value={name}
+                            label='Name'
+                            autoComplete='off'
+                            onBlur={handleBlur}
+                            placeholder='John Doe'
+                            onFocus={e => setFocus(e.target.name)}
+                            onChange={e => setName(e.target.value)}
+                          />
+                          </Grid>
+                          <Grid item xs={4}>
+                          <CustomTextField
+                            fullWidth
+                            name='campaign_id'
+                            value={campaign_id}
+                            label='Camp Id'
+                            autoComplete='off'
+                            onBlur={handleBlur}
+                            placeholder='2'
+                            onFocus={e => setFocus(e.target.name)}  // Updated this line
+                            onChange={e => setCampId(e.target.value)}
+                          />
                           </Grid>
                           <Grid item xs={4}>
                             <CustomTextField
@@ -217,7 +272,7 @@ const DonarAddPaymentPage = () => {
                               onBlur={handleBlur}
                               onChange={handleInputChange}
                               onFocus={e => setFocus(e.target.name)}
-                              placeholder={Payment.fns.cardType(cardNumber) === 'amex' ? '1234' : '123'}
+                              placeholder={Payment.fns.cardType(card_number) === 'amex' ? '1234' : '123'}
                             />
                           </Grid>
                           <Grid item xs={4}>
