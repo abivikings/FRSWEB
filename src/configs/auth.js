@@ -8,5 +8,5 @@ export default {
   campaignDetails: process.env.NEXT_PUBLIC_BASE_URL +  '/api/campaign-details/',
   addDonar: process.env.NEXT_PUBLIC_BASE_URL +  '/api/donor/',
   superAdminDashboard: process.env.NEXT_PUBLIC_BASE_URL +  '/api/super_admin_dashboard/',
-  donate: process.env.NEXT_PUBLIC_BASE_URL +  '/api/donate/'
+  paymentDonate: process.env.NEXT_PUBLIC_BASE_URL +  '/api/donate/'
 }

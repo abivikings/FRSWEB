@@ -122,42 +122,49 @@ const DonarAddPaymentPage = () => {
     const cardNum=card_number.replace(/\s/g, '');
 
     const formData = {
-      campaign_id:campaign_id,
+      campaign_id: campaign_id,
       card_number: cardNum,
       exp_date: newExpDate,
       amount: parseFloat(amount) || 0
     };
+    
     console.log(formData);
   
     try {
       const response = await axios.post(
-        apiConfig.donate,
+        apiConfig.paymentDonate,
         formData,
-        
-        // {
-        //   headers: {
-        //     Authorization: `Bearer ${storedToken}`,
-        //     'Content-Type': 'application/json',
-        //   },
-        //}
+        {
+          headers: {
+            Authorization: `Bearer ${storedToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
       );
-  
+    
       // Handle successful response
       console.log('Response:', response.data);
-  
+    
       // Show success message (you can replace this with your own notification logic)
       alert('Donate By User Successfully');
-  
+    
       // Clear form fields
       e.target.reset();
-  
+    
       // Close the sidebar
       handleClose();
     } catch (error) {
       // Handle error
       console.error('Error:', error);
+    
+      // Additional error details for debugging
+      console.log('Error Response:', error.response);
+      console.log('Error Message:', error.message);
+      console.log('Error Config:', error.config);
+    
       // You might want to show an error message here
     }
+    
   };
   
 
